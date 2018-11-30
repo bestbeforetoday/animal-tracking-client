@@ -1,0 +1,22 @@
+{
+    "name": "animal-tracking-client",
+    "version": "1.0.0",
+    "description": "Animal tracking client",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "npm run lint && tsc",
+        "lint": "tslint **/*.ts"
+    },
+    "author": {
+        "name": "Mark S. Lewis",
+        "email": "Mark_Lewis@uk.ibm.com"
+    },
+    "license": "Apache-2.0",
+    "dependencies": {
+        "fabric-network": "^1.4.0-snapshot"
+    },
+    "devDependencies": {
+        "fabric-ca-client": "^1.4.0-snapshot",
+        "fabric-client": "^1.4.0-snapshot"
+    }
+}
