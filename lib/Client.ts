@@ -80,22 +80,26 @@ export class Client {
     private async createWallet(): Promise<FileSystemWallet> {
         console.log("Using wallet directory:", WALLET_DIRECTORY);
         const wallet = new FileSystemWallet(WALLET_DIRECTORY);
+        await this.populateWallet(wallet);
+        return wallet;
+    }
 
+    private async populateWallet(wallet: FileSystemWallet): Promise<void> {
         const identityExists = await wallet.exists(IDENTITY_LABEL);
-        if (!identityExists) {
-            console.log("Adding identity to wallet");
-
-            console.log("Reading certificate file:", IDENTITY_CERT_FILE);
-            const certificatePem = (await readFileAsync(IDENTITY_CERT_FILE)).toString("utf8");
-
-            console.log("Reading private key file:", IDENTITY_KEY_FILE);
-            const privateKeyPem = (await readFileAsync(IDENTITY_KEY_FILE)).toString("utf8");
-
-            const identity = X509WalletMixin.createIdentity(MSP_NAME, certificatePem, privateKeyPem);
-            await wallet.import(IDENTITY_LABEL, identity);
-            console.log("Identity addeed to wallet");
+        if (identityExists) {
+            return;
         }
 
-        return wallet;
+        console.log("Adding identity to wallet");
+
+        console.log("Reading certificate file:", IDENTITY_CERT_FILE);
+        const certificatePem = (await readFileAsync(IDENTITY_CERT_FILE)).toString("utf8");
+
+        console.log("Reading private key file:", IDENTITY_KEY_FILE);
+        const privateKeyPem = (await readFileAsync(IDENTITY_KEY_FILE)).toString("utf8");
+
+        const identity = X509WalletMixin.createIdentity(MSP_NAME, certificatePem, privateKeyPem);
+        await wallet.import(IDENTITY_LABEL, identity);
+        console.log("Identity addeed to wallet");
     }
 }
